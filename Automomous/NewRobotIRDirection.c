@@ -17,7 +17,7 @@
 // system headers
 #include "C:\Includes\rdpartyrobotcdr-3.0b1\drivers\hitechnic-irseeker-v2.h"
 #include "C:\Includes\rdpartyrobotcdr-3.0b1\drivers\hitechnic-protoboard.h"
-#include "JoystickDriver.c"
+//#include "JoystickDriver.c"
 
 // global variables
 #include "Variables.h"

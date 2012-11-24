@@ -2,6 +2,8 @@
 #define __FOLLOW_SIGNAL_H__
 
 #include "GetDegrees.h"
+#include "IronWood.h"
+
 
 void FollowSignal()
 {
@@ -19,24 +21,35 @@ void FollowSignal()
 		{
 			eraseDisplay();
 			nxtDisplayString(6, "Right");
-			motor[motorD] = -(Power + abs(Degree * 4) + Turn);
-			motor[motorE] = (Power);
+			MoveConstantSpeedMotorD(Power + abs(Degree * 4), 500);
+			MoveConstantSpeedMotorE(Power, 500);
+
+			//motor[motorD] = -(Power + abs(Degree * 4) + Turn);
+			//motor[motorE] = (Power);
 		}
 		else if(Degree < 0)
 		{
 			eraseDisplay();
 			nxtDisplayString(6, "Left");
-			motor[motorD] = -(Power + Turn);
-			motor[motorE] = (Power + abs(Degree * 4));
+
+			MoveConstantSpeedMotorD(Power, 500);
+			MoveConstantSpeedMotorE(Power + abs(Degree * 4), 500);
+
+			//motor[motorD] = -(Power + Turn);
+			//motor[motorE] = (Power + abs(Degree * 4));
 		}
 		else
 		{
 			eraseDisplay();
 			nxtDisplayString(6, "Straight");
-			motor[motorD] = -(Power + Turn);
-			motor[motorE] = (Power);
+
+			MoveConstantSpeedMotorD(Power, 500);
+			MoveConstantSpeedMotorE(Power, 500);
+
+			//motor[motorD] = -(Power + Turn);
+			//motor[motorE] = (Power);
 		}
-			Sleep(500);
+		//Sleep(500);
 		CheckTimes++;
 
 		if (CheckTimes == 5)
