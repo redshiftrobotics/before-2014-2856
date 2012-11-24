@@ -2,16 +2,17 @@
 #define __FOLLOW_SIGNAL_H__
 
 #include "GetDegrees.h"
-#include "IronWood.h"
+
 
 
 void FollowSignal()
 {
-	int Power = 20;
+	int Power = 30;
 	int Turn = 10;
 	int Degree;
 	int CheckTimes = 0;
-	while(CheckTimes <= 9)
+	double Multiplier = 1.5;
+	while(CheckTimes <= 7)
 	{
 		motor[motorD] = 0;
 		motor[motorE] = 0;
@@ -19,44 +20,41 @@ void FollowSignal()
 
 		if (Degree > 0)
 		{
-			eraseDisplay();
-			nxtDisplayString(6, "Right");
-			MoveConstantSpeedMotorD(Power + abs(Degree * 4), 500);
-			MoveConstantSpeedMotorE(Power, 500);
-
-			//motor[motorD] = -(Power + abs(Degree * 4) + Turn);
-			//motor[motorE] = (Power);
+			motor[motorD] = -(Power + abs(Degree * Multiplier) + Turn);
+			motor[motorE] = (Power);
 		}
 		else if(Degree < 0)
 		{
-			eraseDisplay();
-			nxtDisplayString(6, "Left");
-
-			MoveConstantSpeedMotorD(Power, 500);
-			MoveConstantSpeedMotorE(Power + abs(Degree * 4), 500);
-
-			//motor[motorD] = -(Power + Turn);
-			//motor[motorE] = (Power + abs(Degree * 4));
+			motor[motorD] = -(Power + Turn);
+			motor[motorE] = (Power + abs(Degree * Multiplier));
 		}
 		else
 		{
-			eraseDisplay();
-			nxtDisplayString(6, "Straight");
-
-			MoveConstantSpeedMotorD(Power, 500);
-			MoveConstantSpeedMotorE(Power, 500);
-
-			//motor[motorD] = -(Power + Turn);
-			//motor[motorE] = (Power);
+			motor[motorD] = -(Power + Turn);
+			motor[motorE] = (Power);
 		}
-		//Sleep(500);
-		CheckTimes++;
 
-		if (CheckTimes == 5)
+		Sleep(650);
+		CheckTimes++;
+		//if (CheckTimes == 2)
+		//{
+		//	motor[motorD] = -(Power * 2);
+		//	motor[motorE] = (Power * 2);
+		//	Sleep(1000);
+		//}
+		if (CheckTimes == 4)
+		{
+			Multiplier = 2.5;
+		}
+		if (CheckTimes == 4)
 		{
 			MoveVCupToPosition(200);
 		}
-		if (CheckTimes == 9)
+		if (CheckTimes == 6)
+		{
+			MoveVCupToPosition(300);
+		}
+		if (CheckTimes == 7)
 		{
 			MoveVCupToPosition(400);
 		}

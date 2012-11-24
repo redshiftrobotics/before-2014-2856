@@ -11,7 +11,7 @@ int GetDegrees()
 		nxtDisplayString(3, "%i", ServoDegree);
 		nxtDisplayString(4, "%i", S1RawValues[2]);
 		MoveServoToPosition(ServoDegree);
-		Sleep(50);
+		Sleep(70);
 		ServoDegree = ServoDegree - 5;
 		HTIRS2readAllACStrength(IRS1, S1RawValues[0], S1RawValues[1], S1RawValues[2], S1RawValues[3], S1RawValues[4]);
 		if (S1RawValues[2] > BiggestServoValue)
@@ -26,7 +26,7 @@ int GetDegrees()
 		}
 	}
 	ServoDegree = 65;
-
+	nxtDisplayString(2, "%i", NumberOfRepeats);
 	if (NumberOfRepeats == 1)
 	{
 		return BiggestServoDegree;

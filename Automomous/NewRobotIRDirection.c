@@ -1,9 +1,10 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTServo,  none)
+#pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S2,     LimitSwitches,  sensorI2CCustom9V)
 #pragma config(Sensor, S3,     IRS1,           sensorI2CCustom)
 #pragma config(Sensor, S4,     ,               sensorTouch)
-#pragma config(Motor,  mtr_S1_C1_1,     motorD,        tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C1_2,     motorE,        tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C1_1,     motorD,        tmotorTetrix, PIDControl, encoder)
+#pragma config(Motor,  mtr_S1_C1_2,     motorE,        tmotorTetrix, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C2_1,     motorF,        tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C2_2,     FourBar,       tmotorTetrix, openLoop)
 #pragma config(Servo,  srvo_S1_C3_1,    servo1,               tServoNone)
@@ -25,10 +26,7 @@
 #include "MoveServoToPosition.h"
 #include "GetDegrees.h"
 #include "FollowSignal.h"
-#include "Rotate90.h"
-#include "MoveArmToMiddlePeg.h"
 #include "MoveBack.h"
-#include "MoveForward.h"
 #include "MoveArmToFirstPeg.h"
 #include "MoveArmToRestingPosition.h"
 
@@ -38,8 +36,10 @@ task main()
 	MoveArmToFirstPeg();
 	Sleep(1000);
 	MoveVCupToPosition(400);
+
 	FollowSignal();
 	MoveArmToRestingPosition();
 	MoveBack();
 	MoveServoToPosition(0);
+
 }
