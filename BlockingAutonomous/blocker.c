@@ -20,6 +20,8 @@
 
 task main()
 {
- while(nPgmTime < 5000) //While pgmtime > 5 sec,
- MoveForward();         //Exectute the function MoveForward()
+ 	while(nPgmTime < 5000)
+	{
+ 		MoveForward();
+	{
 }
