@@ -1,3 +1,3 @@
-#Include MoveForward.h
-#Include MoveBackward.h
-#Include Rotate90.h
+#include "../common/MoveForward.h"
+#include "../common/MoveBackward.h"
+#include "../common/Rotate90.h"
