@@ -23,5 +23,5 @@ task main()
  	while(nPgmTime < 5000)
 	{
  		MoveForward();
-	{
+	}
 }
