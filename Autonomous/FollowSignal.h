@@ -7,12 +7,13 @@
 
 void FollowSignal()
 {
+	clearDebugStream();
 	int Power = 30;
-	int Turn = 10;
+	int Turn = 35;
 	int Degree;
 	int CheckTimes = 0;
-	double Multiplier = 1.5;
-	while(CheckTimes <= 7)
+	double Multiplier = 1.7;
+	while(CheckTimes <= 5)
 	{
 		motor[motorD] = 0;
 		motor[motorE] = 0;
@@ -34,7 +35,7 @@ void FollowSignal()
 			motor[motorE] = (Power);
 		}
 
-		Sleep(650);
+		Sleep(550);
 		CheckTimes++;
 		//if (CheckTimes == 2)
 		//{
@@ -44,17 +45,10 @@ void FollowSignal()
 		//}
 		if (CheckTimes == 4)
 		{
-			Multiplier = 2.5;
-		}
-		if (CheckTimes == 4)
-		{
+			//Multiplier = 1;
 			MoveVCupToPosition(200);
 		}
 		if (CheckTimes == 6)
-		{
-			MoveVCupToPosition(300);
-		}
-		if (CheckTimes == 7)
 		{
 			MoveVCupToPosition(400);
 		}
