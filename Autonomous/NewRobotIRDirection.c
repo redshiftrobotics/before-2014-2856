@@ -29,7 +29,6 @@
 #include "../common/MoveBack.h"
 #include "MoveArmToFirstPeg.h"
 #include "MoveArmToRestingPosition.h"
-#include "PlayIronManSong.h"
 
 task main()
 {

@@ -13,7 +13,7 @@ void FollowSignal()
 	int Degree;
 	int CheckTimes = 0;
 	double Multiplier = 1.7;
-	while(CheckTimes <= 5)
+	while(CheckTimes <= 6)
 	{
 		motor[motorD] = 0;
 		motor[motorE] = 0;
