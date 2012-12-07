@@ -14,11 +14,14 @@
 #pragma config(Servo,  srvo_S1_C3_5,    servo5,               tServoNone)
 #pragma config(Servo,  srvo_S1_C3_6,    servo6,               tServoNone)
 
+#include "../common/initialize.h"
+
 #include "../common/Rotate90.h"
 #include "../common/MoveForward.h"
 
 task main()
 {
+	initialize();
 	//MoveForward(1000);
 	Rotate90();
 }
