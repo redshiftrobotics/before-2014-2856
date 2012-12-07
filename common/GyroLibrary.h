@@ -1,6 +1,4 @@
-#pragma config(Sensor, S1,     HTGYRO,              sensorAnalogInactive)
 #include "drivers/hitechnic-gyro.h"
-
 float TempRot = 0;
 float TimeTaken;
 float TotalRot = 0;
@@ -22,15 +20,6 @@ float ReturnGyroDegrees()
 }
 void ZeroGyro()
 {
-	HTGYROstartCal(HTGYRO);
-}
-task main ()
-{
-
-    ZeroGyro();
-    while(true)
-    {
-    	UpdateGyro();
-    	nxtDisplayString(1, "%f", ReturnGyroDegrees());
-		}
+	TotalRot = 0;
+	nxtDisplayString(2, "%f", TotalRot);
 }
