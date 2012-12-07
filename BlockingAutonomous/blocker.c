@@ -22,6 +22,15 @@ task main()
 {
  	while(nPgmTime < 5000)
 	{
- 		MoveForward(1100);
+ 		MoveForward(30);
 	}
+	if(nPgmTime > 5000)
+	{
+		Rotate90();
+	}
+	while(nPgmTime < 10000 && nPgmTime > 6000)
+	{
+		Move Forward(30);
+	}
+
 }
