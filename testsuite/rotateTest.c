@@ -16,7 +16,11 @@
 
 #include "rotateTest.h"
 
+int testIterations = 1;
+
 task main
 {
-	rotateTest();
+	for (int i = 0; i < testIterations; i++) {
+		rotateTest();
+	}
 }
