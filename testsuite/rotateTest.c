@@ -14,18 +14,9 @@
 #pragma config(Servo,  srvo_S1_C3_5,    servo5,               tServoNone)
 #pragma config(Servo,  srvo_S1_C3_6,    servo6,               tServoNone)
 
-//																				#include "../common/initialize.h"
+#include "rotateTest.h"
 
-#include "../common/Rotate90.h"
-#include "../common/MoveForward.h"
-#include "JoystickDriver.c"
-
-task main()
+task main
 {
-	waitForStart();
-	//initialize();
-	MoveForward(5000);
-	Rotate90();
-	Rotate90();
-	Rotate90();
+	rotateTest();
 }
