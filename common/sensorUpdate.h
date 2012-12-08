@@ -1,5 +1,8 @@
 #include "GyroLibrary.h"
 
 task sensorUpdate {
-	UpdateGyro();
+	while(true)
+	{
+		UpdateGyro();
+	}
 }

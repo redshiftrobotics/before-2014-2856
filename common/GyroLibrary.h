@@ -12,8 +12,10 @@ void UpdateGyro()
 
 		time1[T1] = 0;
 		TempRot = HTGYROreadRot(HTGYRO);
-		wait1Msec(1);
+		wait1Msec(0);
+		nxtDisplayString(4, "%f", TotalRot);
 }
+
 float ReturnGyroDegrees()
 {
 		return TotalRot;
@@ -21,5 +23,4 @@ float ReturnGyroDegrees()
 void ZeroGyro()
 {
 	TotalRot = 0;
-	nxtDisplayString(2, "%f", TotalRot);
 }
