@@ -1,4 +1,5 @@
 #include "drivers/hitechnic-gyro.h"
+
 float TempRot = 0;
 float TimeTaken;
 float TotalRot = 0;
@@ -13,7 +14,7 @@ void UpdateGyro()
 		time1[T1] = 0;
 		TempRot = HTGYROreadRot(HTGYRO);
 		wait1Msec(0);
-		nxtDisplayString(4, "%f", TotalRot);
+
 }
 
 float ReturnGyroDegrees()
