@@ -24,7 +24,7 @@ task main()
 	Initialize();
 	Move(80, 3.8);
 	Turn(0, 50, 1000);
-	Move(80, 3.8);
+	Move(80, 4.2);
 	//RotateAmount(90);
 
 }
