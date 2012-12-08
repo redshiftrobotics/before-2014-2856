@@ -1,27 +1,33 @@
 #include "drivers/hitechnic-gyro.h"
 
-float TempRot = 0;
-float TimeTaken;
-float TotalRot = 0;
-float Time;
+float rotSpeed;
+float heading;
 
+void StartGyro()
+{
+	float rotSpeed = 0;
+  float heading = 0;
+  HTGYROstartCal(HTGYRO);
+  time1[T1] = 0;
+}
 void UpdateGyro()
 {
-		Time = time1[T1];
-		TimeTaken = Time / 1000;
-		TotalRot += TempRot * TimeTaken;
-
-		time1[T1] = 0;
-		TempRot = HTGYROreadRot(HTGYRO);
-		wait1Msec(0);
-
+    while (time1[T1] < 20)
+    {
+      wait1Msec(1);
+    }
+    time1[T1]=0;
+    rotSpeed = HTGYROreadRot(HTGYRO);
+    heading += rotSpeed * 0.02;
+    nxtDisplayCenteredBigTextLine(3, "%2.2f", heading);
 }
 
 float ReturnGyroDegrees()
 {
-		return TotalRot;
+		return heading;
 }
+
 void ZeroGyro()
 {
-	TotalRot = 0;
+	heading = 0;
 }

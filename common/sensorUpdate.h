@@ -3,7 +3,7 @@
 task sensorUpdate {
 	while(true)
 	{
-		nxtDisplayString(4, "%f", ReturnGyroDegrees());
+		nxtDisplayString(1, "%f", ReturnGyroDegrees());
 		UpdateGyro();
 	}
 }

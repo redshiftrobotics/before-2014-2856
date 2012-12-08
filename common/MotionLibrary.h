@@ -9,6 +9,7 @@ void Move(int Power, int Rotations)
 	motor[motorD] = 0;
 	motor[motorE] = 0;
 }
+
 void Turn(int DPower, int EPower, int Time)
 {
 	motor[motorD] = -DPower;
