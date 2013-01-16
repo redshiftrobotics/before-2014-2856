@@ -53,7 +53,7 @@ float leftpower = 0;	//drive motor powers
 float rightpower = 0;
 float drive_multiplier = 1;  //for turbo & slow speed
 
-
+float fourbarposition = 0.9;
 
 
 ///////////////////////////////////////////MOVES V-CUP UP AND DOWN//////////////////////////////////////////////////////
@@ -63,7 +63,7 @@ void vCupPosition() //The funtion which moves the v cup up and down
 	if(joy2Btn(5) == 1) //If button 5 on the joystick which controls the arm is pressed then do the following...
 	{
 		servoposition1 += 5;
-		if(servoposition1 > 255) servoposition1 = 255;//
+		if(servoposition1 > 255) servoposition1 = 255;
 		servoposition2 = 255 - servoposition1;
 	}
 	else if(joy2Btn(6) == 1) //If button 6 is pressed then do the following...
@@ -164,8 +164,39 @@ void fourbarlift()
 	{
 		fourbarpower = 0;
 	}
-	motor[FourBar] = fourbarpower;
-	if(debug) {nxtDisplayString(2, "encoder: %i", nMotorEncoder[FourBar]);}
+
+	if (fourbarpower != 0) {
+		//if we're going up
+		if (fourbarpower > 0 &&) {
+			MoveArmUp(fourbarposition);
+			switch (fourbarposition) {
+				case 0.9:
+					fourbarposition = 1;
+					break;
+				case 1:
+					fourbarposition = 2;
+					break;
+				case 1.9:
+					fourbarposition = 2;
+				default:
+			}
+		//if we're going down
+		if (fourbarpower < 0) {
+			MoveArmDown(fourbarposition);
+			switch (fourbarposition) {
+				case 2:
+					fourbarposition = 1.9;
+					break;
+				case 1.9:
+					fourbarposition = 1;
+					break;
+				case 1:
+					fourbarposition = 0.9;
+				default:
+			}
+		}
+	}
+	//if(debug) {nxtDisplayString(2, "encoder: %i", nMotorEncoder[FourBar]);}
 }
 
 
@@ -175,7 +206,7 @@ task main()
 	//servo[servo1]=400;
 	//servo[servo2]=400;
 	nMotorEncoder[FourBar] = 0;
-	while(true)  //infinite loopA
+	while(true)  //infinite loop
 	{
 		getJoystickSettings(joystick);
 

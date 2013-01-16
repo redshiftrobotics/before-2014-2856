@@ -41,7 +41,6 @@ void MoveArmUp(float position, float power)
 			MoveArm(0.1, power);
 		case 2:
 			//if the arm is level with the middle peg
-			MoveArm(1, power);
 		default:
 	}
 }
@@ -53,16 +52,15 @@ void MoveArmDown(float position, float power)
 	switch(position) {
 		case 0.9:
 			//if the arm is just below the bottom peg
-			MoveArm(-0.1, power);
 		case 1:
 			//if the arm is level with the bottom peg
-			MoveArm(-1, power);
+			MoveArm(-0.1, power);
 		case 1.9:
 			//if the arm is just below the middle peg
-			MoveArm(-0.1, power);
+			MoveArm(-0.9, power);
 		case 2:
 			//if the arm is level with the middle peg
-			MoveArm(-1, power);
+			MoveArm(-0.1, power);
 		default:
 	}
 }
