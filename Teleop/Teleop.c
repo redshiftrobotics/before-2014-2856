@@ -72,8 +72,7 @@ void vCupPosition() //The funtion which moves the v cup up and down
 		if(servoposition1 < 0) servoposition1 = 0;
 		servoposition2 = 255 - servoposition1;
 	}
-	servo[servo1] = servoposition1;
-	servo[servo2] = servoposition2;
+	MoveVCupToPosition(servoposition2);
 	if(debug){nxtDisplayString(0, "servos: %i, %i", servoposition1, servoposition2);}
 
 }
