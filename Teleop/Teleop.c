@@ -41,8 +41,9 @@ line 4: limit switch signals (0 means OK, 1 means too high, 2 means too low)
 
 
 #include "JoystickDriver.c"
-#include "Includes/rdpartyrobotcdr-3.0b1/drivers/hitechnic-protoboard.h"
+#include "../common/drivers/hitechnic-protoboard.h"
 
+#include "../common/ArmLibrary.h"
 
 int fourbarpower = 0;  //motor power for the 4bar motor
 int servoposition1 = 128;  //servo positions
