@@ -166,8 +166,8 @@ void fourbarlift()
 
 	if (fourbarpower != 0) {
 		//if we're going up
-		if (fourbarpower > 0 &&) {
-			MoveArmUp(fourbarposition);
+		if (fourbarpower > 0) {
+			MoveArmUp(fourbarposition, fourbarpower);
 			switch (fourbarposition) {
 				case 0.9:
 					fourbarposition = 1;
@@ -179,9 +179,10 @@ void fourbarlift()
 					fourbarposition = 2;
 				default:
 			}
+		}
 		//if we're going down
 		if (fourbarpower < 0) {
-			MoveArmDown(fourbarposition);
+			MoveArmDown(fourbarposition, fourbarpower);
 			switch (fourbarposition) {
 				case 2:
 					fourbarposition = 1.9;
