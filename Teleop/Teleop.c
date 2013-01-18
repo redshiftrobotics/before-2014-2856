@@ -167,33 +167,11 @@ void fourbarlift()
 	if (fourbarpower != 0) {
 		//if we're going up
 		if (fourbarpower > 0) {
-			MoveArmUp(fourbarposition, fourbarpower);
-			switch (fourbarposition) {
-				case 0.9:
-					fourbarposition = 1;
-					break;
-				case 1:
-					fourbarposition = 2;
-					break;
-				case 1.9:
-					fourbarposition = 2;
-				default:
-			}
+			fourbarposition = MoveArmUp(fourbarposition, fourbarpower);
 		}
 		//if we're going down
 		if (fourbarpower < 0) {
-			MoveArmDown(fourbarposition, fourbarpower);
-			switch (fourbarposition) {
-				case 2:
-					fourbarposition = 1.9;
-					break;
-				case 1.9:
-					fourbarposition = 1;
-					break;
-				case 1:
-					fourbarposition = 0.9;
-				default:
-			}
+			fourbarposition = MoveArmDown(fourbarposition, fourbarpower);
 		}
 	}
 	//if(debug) {nxtDisplayString(2, "encoder: %i", nMotorEncoder[FourBar]);}
