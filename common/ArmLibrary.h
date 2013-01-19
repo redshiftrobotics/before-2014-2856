@@ -1,22 +1,43 @@
+/*
+libarm
+*/
+
+#include "LimitswitchLibrary.h"
+
+bool ArmLibrary_FourBarTrackingFailure = false;
+
 void MoveArm(float Rotations, float Power)
 {
-	nMotorEncoder[FourBar] = 0;
+	if (!bottomLimitSwitchTouched()) {
 
-		if (Rotations > 0)
-		{
-			while(nMotorEncoder[FourBar] < Rotations * 1440)
+		nMotorEncoder[FourBar] = 0;
+
+			if (Rotations > 0)
 			{
-				motor[FourBar] = Power;
+				while(nMotorEncoder[FourBar] < Rotations * 1440)
+				{
+					motor[FourBar] = Power;
+				}
 			}
-		}
-		else
-		{
-			while(nMotorEncoder[FourBar] > Rotations * 1440)
+			else
 			{
-				motor[FourBar] = -Power;
+				while(nMotorEncoder[FourBar] > Rotations * 1440)
+				{
+					motor[FourBar] = -Power;
+				}
 			}
+		motor[FourBar] = 0;
+
+	} else {
+		if (bottomLimitSwitchTouched()) {
+			motor[FourBar] = 100;
+		} else if (topLimitSwitchTouched()) {
+			motor[FourBar] = -100;
 		}
-	motor[FourBar] = 0;
+		while (bottomLimitSwitchTouched() || topLimitSwitchTouched()) {
+			Sleep(10);
+		}
+	}
 }
 
 void MoveVCupToPosition(int Position)
@@ -110,41 +131,45 @@ components don't screw up because the VCup isn't where they expect it to be.
 */
 float MoveArmDown(float position, float power, bool moveVCup = true)
 {
-	//FIXME
-	//needs to be calibrated with proper rotation values
-	switch(position) {
-		case 0.9:
-			//if the arm is just below the bottom peg
-			//do nothing, this would break the servo and thus is illegal
-		case 1:
-			//if the arm is level with the bottom peg
-			MoveArm(-0.1, power);
-			MoveVCupToAngle();
-		case 1.9:
-			//if the arm is just below the middle peg
-			MoveArm(-0.9, power);
-		case 2:
-			//if the arm is level with the middle peg
-			MoveArm(-0.1, power);
-			MoveVCupToAngle();
-		default:
-	}
+	if (!ArmLibrary_FourBarTrackingFailure) {
+		//FIXME
+		//needs to be calibrated with proper rotation values
+		switch(position) {
+			case 0.9:
+				//if the arm is just below the bottom peg
+				//do nothing, this would break the servo and thus is illegal
+			case 1:
+				//if the arm is level with the bottom peg
+				MoveArm(-0.1, power);
+				MoveVCupToAngle();
+			case 1.9:
+				//if the arm is just below the middle peg
+				MoveArm(-0.9, power);
+			case 2:
+				//if the arm is level with the middle peg
+				MoveArm(-0.1, power);
+				MoveVCupToAngle();
+			default:
+		}
 
-	//figure out where the position is now and return it
-	switch (position) {
-				case 2:
-					position = 1.9;
-					break;
-				case 1.9:
-					position = 1;
-					break;
-				case 1:
-					position = 0.9;
-					break;
-				case 0.9:
-					position = 0.9;
-					break;
-				default:
+		//figure out where the position is now and return it
+		switch (position) {
+					case 2:
+						position = 1.9;
+						break;
+					case 1.9:
+						position = 1;
+						break;
+					case 1:
+						position = 0.9;
+						break;
+					case 0.9:
+						position = 0.9;
+						break;
+					default:
+		}
+	} else {
+		MoveArm(0.1, power);
 	}
 	return position;
 }
