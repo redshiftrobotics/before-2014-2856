@@ -18,6 +18,7 @@ bool bottomLimitSwitchTouched()
 
 bool topLimitSwitchTouched()
 {
+	int value;
 	//FIXME
 	//return a bogus result until we get actual hardware
 	/*

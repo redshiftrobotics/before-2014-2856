@@ -8,53 +8,49 @@ bool ArmLibrary_FourBarTrackingFailure = false;
 
 void MoveArm(float Rotations, float Power)
 {
-	if (!bottomLimitSwitchTouched()) {
+	nMotorEncoder[FourBar] = 0;
 
-		nMotorEncoder[FourBar] = 0;
-
-			if (Rotations > 0)
+		if (Rotations > 0)
+		{
+			while(nMotorEncoder[FourBar] < Rotations * 1440 && !bottomLimitSwitchTouched() && !topLimitSwitchTouched())
 			{
-				while(nMotorEncoder[FourBar] < Rotations * 1440)
-				{
-					motor[FourBar] = Power;
-				}
+				motor[FourBar] = Power;
 			}
-			else
+		}
+		else
+		{
+			while(nMotorEncoder[FourBar] > Rotations * 1440 && !bottomLimitSwitchTouched() && !topLimitSwitchTouched())
 			{
-				while(nMotorEncoder[FourBar] > Rotations * 1440)
-				{
-					motor[FourBar] = -Power;
-				}
+				motor[FourBar] = -Power;
 			}
-		motor[FourBar] = 0;
+		}
 
-	} else {
-		if (bottomLimitSwitchTouched()) {
-			motor[FourBar] = 100;
-		} else if (topLimitSwitchTouched()) {
-			motor[FourBar] = -100;
-		}
-		while (bottomLimitSwitchTouched() || topLimitSwitchTouched()) {
-			Sleep(10);
-		}
+	if (bottomLimitSwitchTouched()) {
+		motor[FourBar] = 100;
+	} else if (topLimitSwitchTouched()) {
+		motor[FourBar] = -100;
 	}
+
+	while (bottomLimitSwitchTouched() || topLimitSwitchTouched()) {
+		ArmLibrary_FourBarTrackingFailure = true;
+		Sleep(10);
+	}
+
+	motor[FourBar] = 0;
 }
 
 void MoveVCupToPosition(int Position)
 {
-	//FIXME
-	servo[servo1] = 255 - Position;
-	servo[servo2] = Position;
+	servo[servo1] = Position;
 }
 
 void MoveVCupToAngle() {
-	//FIXME
-	MoveVCupToPosition(175);
+	MoveVCupToPosition(200);
 }
 
 void MoveVCupToUpright() {
 	//FIXME
-	MoveVCupToPosition(0);
+	MoveVCupToPosition(68);
 }
 
 /*
@@ -70,43 +66,49 @@ position is a one of the following values:
 */
 float MoveArmUp(float position, float power)
 {
-	//FIXME
-	//needs to be calibrated with proper rotation values
-	switch(position) {
-		case 0.9:
-			//if the arm is just below the bottom peg
-			MoveArm(0.1, power);
-			MoveVCupToUpright();
-		case 1:
-			//if the arm is level with the bottom peg
-			MoveArm(1, power);
-		case 1.9:
-			//if the arm is just below the middle peg
-			MoveArm(0.1, power);
-			MoveVCupToUpright();
-		case 2:
-			//if the arm is level with the middle peg
-			//do nothing, this would break the servo and thus is illegal
-		default:
-	}
-
-	//figure out where the position is now and return it
-	switch (position) {
-				case 0.9:
-					position = 1;
-					break;
-				case 1:
-					position = 2;
-					break;
-				case 1.9:
-					position = 2;
-					break;
-				case 2:
-					position = 2;
-					break;
-				default:
+	if (!topLimitSwitchTouched() && !ArmLibrary_FourBarTrackingFailure)
+	{
+		//FIXME
+		//needs to be calibrated with proper rotation values
+		switch(position) {
+			case 0.9:
+				//if the arm is just below the bottom peg
+				MoveArm(0.1, power);
+				MoveVCupToUpright();
+			case 1:
+				//if the arm is level with the bottom peg
+				MoveArm(1, power);
+			case 1.9:
+				//if the arm is just below the middle peg
+				MoveArm(0.1, power);
+				MoveVCupToUpright();
+			case 2:
+				//if the arm is level with the middle peg
+				//do nothing, this would break the servo and thus is illegal
+			default:
 		}
-		return position;
+
+		//figure out where the position is now and return it
+		switch (position) {
+			case 0.9:
+				position = 1;
+				break;
+			case 1:
+				position = 2;
+				break;
+			case 1.9:
+				position = 2;
+				break;
+			case 2:
+				position = 2;
+				break;
+			default:
+		}
+	} else {
+		ArmLibrary_FourBarTrackingFailure = true;
+		MoveArm(0.1, power);
+	}
+	return position;
 }
 
 /*
@@ -131,7 +133,7 @@ components don't screw up because the VCup isn't where they expect it to be.
 */
 float MoveArmDown(float position, float power, bool moveVCup = true)
 {
-	if (!ArmLibrary_FourBarTrackingFailure) {
+	if (!ArmLibrary_FourBarTrackingFailure && !ArmLibrary_FourBarTrackingFailure) {
 		//FIXME
 		//needs to be calibrated with proper rotation values
 		switch(position) {
@@ -169,6 +171,7 @@ float MoveArmDown(float position, float power, bool moveVCup = true)
 					default:
 		}
 	} else {
+		ArmLibrary_FourBarTrackingFailure = true;
 		MoveArm(0.1, power);
 	}
 	return position;
