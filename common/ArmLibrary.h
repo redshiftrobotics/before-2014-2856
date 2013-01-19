@@ -21,6 +21,7 @@ void MoveArm(float Rotations, float Power)
 
 void MoveVCupToPosition(int Position)
 {
+	//FIXME
 	servo[servo1] = 255 - Position;
 	servo[servo2] = Position;
 }
