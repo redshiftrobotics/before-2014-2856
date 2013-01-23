@@ -41,7 +41,9 @@ void MoveArm(float Rotations, float Power)
 
 void MoveVCupToPosition(int Position)
 {
+	#ifndef VCUP_SUPPORT_DISABLED
 	servo[servo1] = Position;
+	#endif
 }
 
 void MoveVCupToAngle() {
