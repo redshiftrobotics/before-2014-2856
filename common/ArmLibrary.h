@@ -51,7 +51,6 @@ void MoveVCupToAngle() {
 }
 
 void MoveVCupToUpright() {
-	//FIXME
 	MoveVCupToPosition(68);
 }
 
