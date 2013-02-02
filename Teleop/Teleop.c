@@ -1,9 +1,10 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTServo,  none)
+#pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S2,     HTPB,           sensorI2CCustom9V)
-#pragma config(Motor,  mtr_S1_C1_1,     motorD,        tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C1_1,     FourBar,       tmotorTetrix, PIDControl, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     motorE,        tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C2_1,     motorF,        tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C2_2,     FourBar,       tmotorTetrix, PIDControl, reversed, encoder)
+#pragma config(Motor,  mtr_S1_C2_2,     motorG,        tmotorTetrix, PIDControl, reversed, encoder)
 #pragma config(Servo,  srvo_S1_C3_1,    servo1,               tServoStandard)
 #pragma config(Servo,  srvo_S1_C3_2,    servo2,               tServoStandard)
 #pragma config(Servo,  srvo_S1_C3_3,    servo3,               tServoNone)
@@ -38,22 +39,26 @@ line 4: limit switch signals (0 means OK, 1 means too high, 2 means too low)
 
 */
 
+#define VCUP_SUPPORT_DISABLED
+
+string status = "none";
 
 #include "JoystickDriver.c"
 #include "../common/drivers/hitechnic-protoboard.h"
 
-#include "../common/ArmLibrary.h"
+
 
 int fourbarpower = 0;  //motor power for the 4bar motor
 int servoposition1 = 128;  //servo positions
 int servoposition2 = 122;
-int debug = 1;		//set to zero to turn off debug
+int debug = 0;		//set to zero to turn off debug
 float leftpower = 0;	//drive motor powers
 float rightpower = 0;
 float drive_multiplier = 1;  //for turbo & slow speed
 
-float fourbarposition = 0.9;
-
+int fourbarposition = 1;
+const int ArmSpeed = 50;
+#include "../common/ArmLibrary.h"
 
 ///////////////////////////////////////////MOVES V-CUP UP AND DOWN//////////////////////////////////////////////////////
 
@@ -72,7 +77,7 @@ void vCupPosition() //The funtion which moves the v cup up and down
 		servoposition2 = 255 - servoposition1;
 	}
 	MoveVCupToPosition(servoposition2);
-	if(debug){nxtDisplayString(0, "servos: %i, %i", servoposition1, servoposition2);}
+	//if(debug){nxtDisplayString(0, "servos: %i, %i", servoposition1, servoposition2);}
 
 }
 
@@ -148,7 +153,7 @@ void tankdrive()
 	{
 		leftpower = 0;
 	}
-	if(debug) {nxtDisplayString(1, "drive: %i, %i", leftpower, rightpower);}
+	//if(debug) {nxtDisplayString(1, "drive: %i, %i", leftpower, rightpower);}
 	motor[motorD] = -drive_multiplier*leftpower;		//TURN LEFTDRIVE AT leftpower
 	motor[motorE] = drive_multiplier*rightpower;		//TURN RIGHTDRIVE AT rightpower
 }
@@ -157,20 +162,24 @@ void tankdrive()
 //////////////////////////////////////SETS 4-BAR POSITION////////////////////////////////////////////////////////////////
 void fourbarlift()
 {
-	fourbarpower = joystick.joy2_y2;
+	status="fourbarlift";
+	printDebug(0,0);
+	//Sleep(1000);
+	fourbarpower = joystick.joy1_y2;
 	if(abs(fourbarpower) < 8)			//deadband with threshold of 8
 	{
 		fourbarpower = 0;
 	}
+	//fourbarpower = 100;
 
 	if (fourbarpower != 0) {
 		//if we're going up
 		if (fourbarpower > 0) {
-			fourbarposition = MoveArmUp(fourbarposition, fourbarpower);
+			fourbarposition = MoveArmUp(fourbarposition, ArmSpeed*drive_multiplier);
 		}
 		//if we're going down
 		if (fourbarpower < 0) {
-			fourbarposition = MoveArmDown(fourbarposition, fourbarpower);
+			fourbarposition = MoveArmDown(fourbarposition, ArmSpeed*drive_multiplier);
 		}
 	}
 	//if(debug) {nxtDisplayString(2, "encoder: %i", nMotorEncoder[FourBar]);}
@@ -180,11 +189,14 @@ void fourbarlift()
 //////////////////////////////////////////TASK MAIN///////////////////////////////////////////////////////////////
 task main()
 {
+	bDisplayDiagnostics = false;
+
 	//servo[servo1]=400;
 	//servo[servo2]=400;
 	nMotorEncoder[FourBar] = 0;
 	while(true)  //infinite loop
 	{
+		printDebug(0,0);
 		getJoystickSettings(joystick);
 
 		if(joy2Btn(1)==1)
@@ -194,7 +206,7 @@ task main()
 			servo[servo1]=servoposition1;
 			servo[servo2]=servoposition2;
 			MovePosition2();
-			if(debug) {nxtDisplayString(6, "Position2");}
+			//if(debug) {nxtDisplayString(6, "Position2");}
 		}
 		else if(joy2Btn(2)==1)
 		{
@@ -203,13 +215,13 @@ task main()
 			servo[servo1]=servoposition1;
 			servo[servo2]=servoposition2;
 			MovePosition1();
-			if(debug) {nxtDisplayString(6, "Position1");}
+			//if(debug) {nxtDisplayString(6, "Position1");}
 		}
 		else
 		{
 			vCupPosition();
 			fourbarlift();
-			if(debug) {nxtDisplayString(6, "Joystick");}
+			//if(debug) {nxtDisplayString(6, "Joystick");}
 		}
 		drivespeed();
 		tankdrive();

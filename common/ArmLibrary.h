@@ -4,24 +4,53 @@ libarm
 
 #include "LimitswitchLibrary.h"
 
+void printDebug(int arg1, int arg2) {
+	/*eraseDisplay();
+	nxtDisplayString(0, "position: %i", fourbarposition);
+	//nxtDisplayString(1, "vcup status: %i", vcupangled);
+	nxtDisplayString(3, "bls: %i", bottomLimitSwitchTouched());
+	nxtDisplayString(2, "tls: %i", topLimitSwitchTouched());
+	if (status == "MoveArm ") {
+		nxtDisplayString(4, "status: %s %f %f", status, arg1, arg2);
+	} else {
+		nxtDisplayString(4, "status: %s", status);
+	}*/
+}
+
 bool ArmLibrary_FourBarTrackingFailure = false;
+const float ArmLibrary_FullPegMovement = 1.0;
+const float ArmLibrary_BelowPegMovement = 0.1;
+const float ArmLibrary_BelowPegToRegularMovement = 0.9;
 
-void MoveArm(float Rotations, float Power)
+void MoveArm(float Rotations, int Power)
 {
-	nMotorEncoder[FourBar] = 0;
+	status = "MoveArm ";
+	//printDebug(Rotations, Power);
+	//nxtDisplayString(6, "MoveArm");
 
+	nMotorEncoder[FourBar] = 0;
+int encoderDebug;
 		if (Rotations > 0)
 		{
 			while(nMotorEncoder[FourBar] < Rotations * 1440 && !bottomLimitSwitchTouched() && !topLimitSwitchTouched())
 			{
 				motor[FourBar] = Power;
+				encoderDebug = nMotorEncoder[FourBar];
+				//nxtDisplayString(5, "encoder: %i", encoderDebug);
 			}
 		}
 		else
 		{
+
 			while(nMotorEncoder[FourBar] > Rotations * 1440 && !bottomLimitSwitchTouched() && !topLimitSwitchTouched())
 			{
-				motor[FourBar] = -Power;
+				int nPower = Power;
+				if (nPower > 0) {
+					nPower = nPower*(-1);
+			}
+				motor[FourBar] = nPower;
+				encoderDebug = nMotorEncoder[FourBar];
+				//nxtDisplayString(5, "encoder: %i", encoderDebug);
 			}
 		}
 
@@ -37,6 +66,7 @@ void MoveArm(float Rotations, float Power)
 	}
 
 	motor[FourBar] = 0;
+	//nxtDisplayString(6, "");
 }
 
 void MoveVCupToPosition(int Position)
@@ -47,10 +77,14 @@ void MoveVCupToPosition(int Position)
 }
 
 void MoveVCupToAngle() {
+	status = "MoveVCupToAngle";
+	printDebug(0,0);
 	MoveVCupToPosition(200);
 }
 
 void MoveVCupToUpright() {
+	status = "MoveVCupToUpright";
+	printDebug(0,0);
 	MoveVCupToPosition(68);
 }
 
@@ -65,25 +99,31 @@ position is a one of the following values:
 1 is the bottom bar, 2 is the middle bar. x.9 is just below x, for after we put the ring on.
 2 is illegal because it would break the servo.
 */
-float MoveArmUp(float position, float power)
+int MoveArmUp(int position, int power)
 {
+	status = "MoveArmUp";
+	printDebug(0,0);
+	//Sleep(1000);
 	if (!topLimitSwitchTouched() && !ArmLibrary_FourBarTrackingFailure)
 	{
 		//FIXME
 		//needs to be calibrated with proper rotation values
 		switch(position) {
-			case 0.9:
-				//if the arm is just below the bottom peg
-				MoveArm(0.1, power);
-				MoveVCupToUpright();
 			case 1:
-				//if the arm is level with the bottom peg
-				MoveArm(1, power);
-			case 1.9:
-				//if the arm is just below the middle peg
-				MoveArm(0.1, power);
+				//if the arm is just below the bottom peg
+				MoveArm(ArmLibrary_BelowPegMovement, power);
 				MoveVCupToUpright();
+				break;
 			case 2:
+				//if the arm is level with the bottom peg
+				MoveArm(ArmLibrary_FullPegMovement, power);
+				break;
+			case 3:
+				//if the arm is just below the middle peg
+				MoveArm(ArmLibrary_BelowPegMovement, power);
+				MoveVCupToUpright();
+				break;
+			case 4:
 				//if the arm is level with the middle peg
 				//do nothing, this would break the servo and thus is illegal
 			default:
@@ -91,17 +131,17 @@ float MoveArmUp(float position, float power)
 
 		//figure out where the position is now and return it
 		switch (position) {
-			case 0.9:
-				position = 1;
-				break;
 			case 1:
 				position = 2;
 				break;
-			case 1.9:
-				position = 2;
-				break;
 			case 2:
-				position = 2;
+				position = 4;
+				break;
+			case 3:
+				position = 4;
+				break;
+			case 4:
+				position = 4;
 				break;
 			default:
 		}
@@ -132,42 +172,46 @@ where the VCup is and make sure that nothing bad happens.
 tl;dr: everything assumes that this option is true. it's your responsibility to make sure that other
 components don't screw up because the VCup isn't where they expect it to be.
 */
-float MoveArmDown(float position, float power, bool moveVCup = true)
+int MoveArmDown(int position, int power, bool moveVCup = true)
 {
-	if (!ArmLibrary_FourBarTrackingFailure && !ArmLibrary_FourBarTrackingFailure) {
+	if (!bottomLimitSwitchTouched() && !ArmLibrary_FourBarTrackingFailure) {
 		//FIXME
 		//needs to be calibrated with proper rotation values
 		switch(position) {
-			case 0.9:
+			case 1:
 				//if the arm is just below the bottom peg
 				//do nothing, this would break the servo and thus is illegal
-			case 1:
-				//if the arm is level with the bottom peg
-				MoveArm(-0.1, power);
-				MoveVCupToAngle();
-			case 1.9:
-				//if the arm is just below the middle peg
-				MoveArm(-0.9, power);
+				break;
 			case 2:
-				//if the arm is level with the middle peg
-				MoveArm(-0.1, power);
+				//if the arm is level with the bottom peg
+				MoveArm(-ArmLibrary_BelowPegMovement, power);
 				MoveVCupToAngle();
+				break;
+			case 3:
+				//if the arm is just below the middle peg
+				MoveArm(-ArmLibrary_BelowPegToRegularMovement, power);
+				break;
+			case 4:
+				//if the arm is level with the middle peg
+				MoveArm(-ArmLibrary_BelowPegMovement, power);
+				MoveVCupToAngle();
+				break;
 			default:
 		}
 
 		//figure out where the position is now and return it
 		switch (position) {
-					case 2:
-						position = 1.9;
+					case 4:
+						position = 3;
 						break;
-					case 1.9:
+					case 3:
+						position = 2;
+						break;
+					case 2:
 						position = 1;
 						break;
 					case 1:
-						position = 0.9;
-						break;
-					case 0.9:
-						position = 0.9;
+						position = 1;
 						break;
 					default:
 		}
