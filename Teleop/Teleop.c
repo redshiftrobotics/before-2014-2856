@@ -1,10 +1,10 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTServo,  none)
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S2,     HTPB,           sensorI2CCustom9V)
-#pragma config(Motor,  mtr_S1_C1_1,     FourBar,       tmotorTetrix, PIDControl, reversed, encoder)
+#pragma config(Motor,  mtr_S1_C1_1,     motorD,       tmotorTetrix, PIDControl, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     motorE,        tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C2_1,     motorF,        tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C2_2,     motorG,        tmotorTetrix, PIDControl, reversed, encoder)
+#pragma config(Motor,  mtr_S1_C2_2,     FourBar,        tmotorTetrix, PIDControl, reversed, encoder)
 #pragma config(Servo,  srvo_S1_C3_1,    servo1,               tServoStandard)
 #pragma config(Servo,  srvo_S1_C3_2,    servo2,               tServoStandard)
 #pragma config(Servo,  srvo_S1_C3_3,    servo3,               tServoNone)
@@ -38,10 +38,6 @@ line 3: 4-bar encoder position
 line 4: limit switch signals (0 means OK, 1 means too high, 2 means too low)
 
 */
-
-#define VCUP_SUPPORT_DISABLED
-
-string status = "none";
 
 #include "JoystickDriver.c"
 #include "../common/drivers/hitechnic-protoboard.h"
@@ -163,8 +159,6 @@ void tankdrive()
 void fourbarlift()
 {
 	status="fourbarlift";
-	printDebug(0,0);
-	//Sleep(1000);
 	fourbarpower = joystick.joy1_y2;
 	if(abs(fourbarpower) < 8)			//deadband with threshold of 8
 	{
@@ -196,7 +190,6 @@ task main()
 	nMotorEncoder[FourBar] = 0;
 	while(true)  //infinite loop
 	{
-		printDebug(0,0);
 		getJoystickSettings(joystick);
 
 		if(joy2Btn(1)==1)

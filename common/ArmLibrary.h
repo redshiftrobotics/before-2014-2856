@@ -4,19 +4,6 @@ libarm
 
 #include "LimitswitchLibrary.h"
 
-void printDebug(int arg1, int arg2) {
-	/*eraseDisplay();
-	nxtDisplayString(0, "position: %i", fourbarposition);
-	//nxtDisplayString(1, "vcup status: %i", vcupangled);
-	nxtDisplayString(3, "bls: %i", bottomLimitSwitchTouched());
-	nxtDisplayString(2, "tls: %i", topLimitSwitchTouched());
-	if (status == "MoveArm ") {
-		nxtDisplayString(4, "status: %s %f %f", status, arg1, arg2);
-	} else {
-		nxtDisplayString(4, "status: %s", status);
-	}*/
-}
-
 bool ArmLibrary_FourBarTrackingFailure = false;
 const float ArmLibrary_FullPegMovement = 1.0;
 const float ArmLibrary_BelowPegMovement = 0.1;
@@ -24,19 +11,13 @@ const float ArmLibrary_BelowPegToRegularMovement = 0.9;
 
 void MoveArm(float Rotations, int Power)
 {
-	status = "MoveArm ";
-	//printDebug(Rotations, Power);
-	//nxtDisplayString(6, "MoveArm");
 
 	nMotorEncoder[FourBar] = 0;
-int encoderDebug;
 		if (Rotations > 0)
 		{
 			while(nMotorEncoder[FourBar] < Rotations * 1440 && !bottomLimitSwitchTouched() && !topLimitSwitchTouched())
 			{
 				motor[FourBar] = Power;
-				encoderDebug = nMotorEncoder[FourBar];
-				//nxtDisplayString(5, "encoder: %i", encoderDebug);
 			}
 		}
 		else
@@ -49,8 +30,6 @@ int encoderDebug;
 					nPower = nPower*(-1);
 			}
 				motor[FourBar] = nPower;
-				encoderDebug = nMotorEncoder[FourBar];
-				//nxtDisplayString(5, "encoder: %i", encoderDebug);
 			}
 		}
 
@@ -66,7 +45,6 @@ int encoderDebug;
 	}
 
 	motor[FourBar] = 0;
-	//nxtDisplayString(6, "");
 }
 
 void MoveVCupToPosition(int Position)
@@ -78,13 +56,11 @@ void MoveVCupToPosition(int Position)
 
 void MoveVCupToAngle() {
 	status = "MoveVCupToAngle";
-	printDebug(0,0);
 	MoveVCupToPosition(200);
 }
 
 void MoveVCupToUpright() {
 	status = "MoveVCupToUpright";
-	printDebug(0,0);
 	MoveVCupToPosition(68);
 }
 
@@ -101,9 +77,6 @@ position is a one of the following values:
 */
 int MoveArmUp(int position, int power)
 {
-	status = "MoveArmUp";
-	printDebug(0,0);
-	//Sleep(1000);
 	if (!topLimitSwitchTouched() && !ArmLibrary_FourBarTrackingFailure)
 	{
 		//FIXME
