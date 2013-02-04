@@ -150,7 +150,7 @@ void tankdrive()
 		leftpower = 0;
 	}
 	//if(debug) {nxtDisplayString(1, "drive: %i, %i", leftpower, rightpower);}
-	motor[motorD] = -drive_multiplier*leftpower;		//TURN LEFTDRIVE AT leftpower
+	motor[motorD] = drive_multiplier*leftpower;		//TURN LEFTDRIVE AT leftpower
 	motor[motorE] = drive_multiplier*rightpower;		//TURN RIGHTDRIVE AT rightpower
 }
 
@@ -158,7 +158,6 @@ void tankdrive()
 //////////////////////////////////////SETS 4-BAR POSITION////////////////////////////////////////////////////////////////
 void fourbarlift()
 {
-	status="fourbarlift";
 	fourbarpower = joystick.joy1_y2;
 	if(abs(fourbarpower) < 8)			//deadband with threshold of 8
 	{
@@ -183,8 +182,6 @@ void fourbarlift()
 //////////////////////////////////////////TASK MAIN///////////////////////////////////////////////////////////////
 task main()
 {
-	bDisplayDiagnostics = false;
-
 	//servo[servo1]=400;
 	//servo[servo2]=400;
 	nMotorEncoder[FourBar] = 0;

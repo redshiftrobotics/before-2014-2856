@@ -12,6 +12,7 @@ const float ArmLibrary_BelowPegToRegularMovement = 0.9;
 void MoveArm(float Rotations, int Power)
 {
 
+	#ifndef ARM_SUPPORT_DISABLED
 	nMotorEncoder[FourBar] = 0;
 		if (Rotations > 0)
 		{
@@ -45,6 +46,7 @@ void MoveArm(float Rotations, int Power)
 	}
 
 	motor[FourBar] = 0;
+	#endif //ifndef ARM_SUPPORT_DISABLED
 }
 
 void MoveVCupToPosition(int Position)
@@ -55,12 +57,10 @@ void MoveVCupToPosition(int Position)
 }
 
 void MoveVCupToAngle() {
-	status = "MoveVCupToAngle";
 	MoveVCupToPosition(200);
 }
 
 void MoveVCupToUpright() {
-	status = "MoveVCupToUpright";
 	MoveVCupToPosition(68);
 }
 
