@@ -45,7 +45,12 @@ line 4: limit switch signals (0 means OK, 1 means too high, 2 means too low)
 int fourbarpower = 0;  //motor power for the 4bar motor
 int servoposition1 = 128;  //servo positions
 int servoposition2 = 122;
+#ifdef DEBUG_ENABLED
+int debug = 1;
+#else
 int debug = 0;		//set to zero to turn off debug
+#endif
+
 float leftpower = 0;	//drive motor powers
 float rightpower = 0;
 float drive_multiplier = 1;  //for turbo & slow speed
@@ -180,6 +185,9 @@ void fourbarlift()
 //////////////////////////////////////////TASK MAIN///////////////////////////////////////////////////////////////
 task main()
 {
+	#ifndef DEBUG_ENABLED
+	bDisplayDiagnostics = false;
+	#endif
 	//servo[servo1]=400;
 	//servo[servo2]=400;
 	nMotorEncoder[FourBar] = 0;
