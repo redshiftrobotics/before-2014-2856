@@ -5,9 +5,9 @@ libarm
 #include "LimitswitchLibrary.h"
 
 bool ArmLibrary_FourBarTrackingFailure = false;
-const float ArmLibrary_FullPegMovement = 2.4;
-const float ArmLibrary_BelowPegMovement = 0.01;
-const float ArmLibrary_BelowPegToRegularMovement = 0.9;
+const float ArmLibrary_FullPegMovement = -2.3;
+const float ArmLibrary_BelowPegMovement = -0.01;
+const float ArmLibrary_BelowPegToRegularMovement = -0.9;
 
 void MoveArm(float Rotations, int Power)
 {
