@@ -1,5 +1,5 @@
 #include "SensorUpdate.h"
-#include "../CommonLibraries/GyroLibrary.h"
+#include "../common/GyroLibrary.h"
 
 void Initialize() {
 	StartGyro();

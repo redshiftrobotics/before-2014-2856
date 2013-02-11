@@ -1,4 +1,4 @@
-#include "../CommonLibraries/GyroLibrary.h"
+#include "../common/GyroLibrary.h"
 
 task sensorUpdate {
 	while(true)
