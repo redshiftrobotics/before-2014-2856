@@ -161,7 +161,7 @@ void tankdrive()
 //////////////////////////////////////SETS 4-BAR POSITION////////////////////////////////////////////////////////////////
 void fourbarlift()
 {
-	fourbarpower = joystick.joy1_y2;
+	fourbarpower = joystick.joy2_y2;
 	if(abs(fourbarpower) < 8)			//deadband with threshold of 8
 	{
 		fourbarpower = 0;
