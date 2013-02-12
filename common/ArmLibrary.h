@@ -136,20 +136,13 @@ position is a one of the following values:
 1, 1.9, 2
 1 is the bottom bar, 2 is the middle bar. x.9 is just below x, for after we put the ring on.
 0.9 is illegal because it would break the servo.
-
-OPTIONAL ARGUMENTS:
-moveVCup determines whether the V-Cup automatically moves for scoring and dispensing operations.
-this option defaults to true. be careful when passing false, as this method and all other methods
-*do not compensate* for the absense of VCup movement. it is your responsibility to keep track of
-where the VCup is and make sure that nothing bad happens.
-tl;dr: everything assumes that this option is true. it's your responsibility to make sure that other
-components don't screw up because the VCup isn't where they expect it to be.
 */
-int MoveArmDown(int position, int power, bool moveVCup = true)
+int MoveArmDown(int position, int power)
 {
 	if (!bottomLimitSwitchTouched() && !ArmLibrary_FourBarTrackingFailure) {
 		//FIXME
 		//needs to be calibrated with proper rotation values
+
 		switch(position) {
 			case 1:
 				//if the arm is just below the bottom peg
