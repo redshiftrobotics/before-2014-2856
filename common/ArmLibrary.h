@@ -5,8 +5,9 @@ libarm
 #include "LimitswitchLibrary.h"
 
 bool ArmLibrary_FourBarTrackingFailure = false;
-const float ArmLibrary_FullPegMovement = -2.3;
-const float ArmLibrary_BelowPegMovement = -0.01;
+const float ArmLibrary_FullPegMovement = -1.7;
+// from 3 to 4 and 1 to 2
+const float ArmLibrary_BelowPegMovement = -0.001;
 const float ArmLibrary_BelowPegToRegularMovement = -0.9;
 
 void MoveArm(float Rotations, int Power)
@@ -52,7 +53,7 @@ void MoveArm(float Rotations, int Power)
 void MoveVCupToPosition(int Position)
 {
 	#ifndef VCUP_SUPPORT_DISABLED
-	servo[servo1] = Position;
+	servo[servo2] = Position;
 	#endif
 }
 
@@ -142,7 +143,6 @@ int MoveArmDown(int position, int power)
 	if (!bottomLimitSwitchTouched() && !ArmLibrary_FourBarTrackingFailure) {
 		//FIXME
 		//needs to be calibrated with proper rotation values
-
 		switch(position) {
 			case 1:
 				//if the arm is just below the bottom peg
@@ -186,4 +186,19 @@ int MoveArmDown(int position, int power)
 		MoveArm(0.1, power);
 	}
 	return position;
+}
+
+int MoveToPosition(int CurrentPosition, int NextPosition, int power = 100)
+{
+	if (NextPosition < CurrentPosition) {
+		while (NextPosition < CurrentPosition) {
+			CurrentPosition = MoveArmDown(CurrentPosition, power);
+		}
+	}
+	if (NextPosition > CurrentPosition){
+		while (NextPosition > CurrentPosition) {
+			CurrentPosition = MoveArmUp(CurrentPosition, power);
+		}
+	}
+	return NextPosition;
 }
