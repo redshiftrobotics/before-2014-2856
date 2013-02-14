@@ -95,42 +95,6 @@ void drivespeed() //The funtion which allows you to ajust the speed of the drive
 	}
 }
 
-///////////////////////////////////////MOVES TO MIDDLE PEG POSITION/////////////////////////////////////////////////////////////////////
-void MovePosition2()
-{
-	if((nMotorEncoder[FourBar]-5700)<-5) //If the four bar is under -5700 then do the following...
-	{
-		fourbarpower=100; //Four bar goes up
-	}
-	else if((nMotorEncoder[FourBar]-5700)>5)
-	{
-		fourbarpower=-100; //fourbar goes down
-	}
-	else
-	{
-		fourbarpower=0;
-	}
-	motor[FourBar] = fourbarpower;
-}
-//////////////////////////////////////////////////////MOVES TO BOTTOM PEG POSITION/////////////////////////////////////////////////
-void MovePosition1()
-{
-
-	if(nMotorEncoder[FourBar]<-5)
-	{
-		fourbarpower=100;
-	}
-	else if(nMotorEncoder[FourBar]>5)
-	{
-		fourbarpower=-100;
-	}
-	else
-	{
-		fourbarpower=0;
-	}
-	motor[FourBar] = fourbarpower;
-}
-
 /////////////////////////////////////BASIC TANK DRIVE////////////////////////////////////////////////////////////////////
 void tankdrive()
 {
@@ -185,24 +149,7 @@ task main()
 	{
 		getJoystickSettings(joystick);
 
-		if(joy2Btn(1)==1)
-		{
-			servoposition1=238;
-			servoposition2=12;
-			servo[servo1]=servoposition1;
-			servo[servo2]=servoposition2;
-			MovePosition2();
-			//if(debug) {nxtDisplayString(6, "Position2");}
-		}
-		else if(joy2Btn(2)==1)
-		{
-			servoposition1=238;
-			servoposition2=12;
-			servo[servo1]=servoposition1;
-			servo[servo2]=servoposition2;
-			MovePosition1();
-			//if(debug) {nxtDisplayString(6, "Position1");}
-		}
+
 
 		//vCupPosition();
 		fourbarlift();
